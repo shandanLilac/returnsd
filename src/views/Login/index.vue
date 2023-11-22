@@ -1,0 +1,13 @@
+<script setup>
+
+</script>
+
+<template>
+  <h1>login</h1>
+</template>
+
+<style scoped lang="scss">
+h1 {
+  color: $defColor;
+}
+</style>
