@@ -5,13 +5,13 @@
 <template>
   <nav class="layout-nav">
     <div class="container">
-      <ul class="login" v-if="true">
-        <li><a href="javascript:;"><i>icon</i>用户名</a></li>
+      <ul class="login" v-if="false">
+        <li><a href="javascript:;"><i class="iconfont icon-userCenter"></i>用户名</a></li>
         <li><a href="javascript:;">个人中心</a></li>
         <li><a href="javascript:;">退出登录</a></li>
       </ul>
       <ul class="logout" v-else>
-        <li><a href="javascript:;">请先登录</a></li>
+        <li><a href="javascript:;" @click="$router.push('/login')">请先登录</a></li>
         <li><a href="javascript:;">帮助中心</a></li>
         <li><a href="javascript:;">关于我们</a></li>
       </ul>

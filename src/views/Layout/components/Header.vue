@@ -28,7 +28,7 @@
       </ul>
 
       <div class="search">
-        <i class="iconfont">icon</i>
+        <i class="iconfont icon-sousuo"></i>
         <input type="text" placeholder="搜一搜">
       </div>
     </div>
@@ -72,8 +72,8 @@
           line-height: 32px;
 
           &:hover {
-            color: $subColor;
-            border-bottom: 1px solid $subColor;
+            color: $defColor;
+            border-bottom: 1px solid $defColor;
           }
         }
       }
