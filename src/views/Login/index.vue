@@ -1,43 +1,111 @@
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onUpdated } from "vue"
 import { useRouter } from "vue-router"
 import { ElMessage } from "element-plus"
 import 'element-plus/theme-chalk/el-message.css'
+import { regUserAPI, genCaptchaAPI } from "@/apis/user"
+import { useUserStore } from "@/stores/useUserStore"
+import { v4 as uuidv4 } from 'uuid'
+import { encryptFn } from '@/utils/crypto-js-CBC'
 
+const userStore = useUserStore()
 const router = useRouter()
+// 表单数据
 const formData = ref({
-  username: 'admin',
-  password: '111111',
-  agree: false
+  username: 'zex126',
+  password: 'Ab123456',
+  repwd: '',
+  captcha: '',
+  uuid: '',
+  agree: true
 })
+
+// 表单验证
+const reguname = /^[a-zA-Z][\w_-]{3,15}$/
+const regpwd = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/
 const formRef = ref(null)
+const verifyRepwd = (rules, val, callback) => {
+  if (val !== formData.value.password) return callback(new Error('密码不一致'))
+  callback()
+}
 const rules = {
   username: [
-    { required: true, message: '必填项不能为空', trigger: 'blur' }
+    { required: true, message: '必填项不能为空', trigger: 'blur' },
+    { pattern: reguname, message: '用户名必须以字母开头且长度为4-15位', trigger: 'blur' }
   ],
   password: [
-    { required: true, message: '必填项不能为空', trigger: 'blur' }
+    { required: true, message: '必填项不能为空', trigger: 'blur' },
+    { pattern: regpwd, message: '密码必须包含大、小写字母、数字，长度为6-15位', trigger: 'blur' }
+  ],
+  repwd: [
+    { validator: verifyRepwd, trigger: 'blur' }
   ],
   agree: [
     {
       validator: (rules, val, callback) => {
-        if (val === false) callback(new Error('请先同意协议'))
-        else callback()
+        if (val === false) return callback(new Error('请先同意协议'))
+        callback()
       }
+    }
+  ],
+  captcha: [
+    { required: true, message: '必填项不能为空', trigger: 'blur' },
+    {
+      validator: (rules, val, callback) => {
+        if (val.toLowerCase() != svgText.value.toLowerCase()) return callback(new Error('验证码不正确'))
+        callback()
+      },
+      trigger: 'blur'
     }
   ]
 }
+
+// 登录
 const submitForm = (formE1) => {
-  formE1.validate((valid) => {
+  formE1.validate(async (valid) => {
+    let { username, password, captcha, uuid } = formData.value
+    password = encryptFn(password)
     if (valid) {
+      await userStore.login(username, password, captcha, uuid)
+      ElMessage({ type: 'success', message: 'welcome' })
       router.replace('/')
-      ElMessage({ type: 'success', message: '登录成功' })
-    } else {
-      ElMessage({ type: 'warning', message: '登录失败' })
-      return false
     }
   })
 }
+
+// 注册
+const isLoginVisible = ref(true)
+const formReg = ref(null)
+const regUser = (formEl) => {
+  formEl.validate(async (valid) => {
+    if (valid) {
+      const { username, password, repwd, captcha, uuid } = formData.value
+      await regUserAPI(username, password, repwd, captcha, uuid)
+      isLoginVisible.value = true
+      ElMessage({ type: 'success', message: '注册成功，请登录。' })
+    }
+  })
+}
+const svgStr = ref(''), svgText = ref('')
+// 图形验证
+const genCaptcha = async () => {
+  formData.value.uuid = uuidv4()
+  const { data: res } = await genCaptchaAPI(formData.value.uuid)
+  svgStr.value = res.data.svg
+  svgText.value = res.data.text
+  localStorage.setItem('key', res.data.pubkey)
+}
+
+onMounted(() => {
+  genCaptcha()
+  // console.log('onMounted')
+})
+onUpdated(() => { genCaptcha() })
+// onBeforeMount(() => { console.log('onBeforeMount') })
+// onBeforeUpdate(() => { console.log('onbeforeUpdate') })
+// onUpdated(() => { console.log('onUpdated') })
+// onBeforeMount(() => { console.log('onBeforeMount') })
+// onUnmounted(() => { console.log('onUnmounted') })
 </script>
 
 <template>
@@ -55,26 +123,70 @@ const submitForm = (formE1) => {
       </div>
     </header>
 
-    <section class="login-section">
+    <section class="login-section section" key="login" v-if="isLoginVisible">
       <div class="wrapper">
         <nav>
-          <a href="javascript:;">账户登录</a>
+          <a href="javascript:;">用户登录</a>
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form ref="formRef" :model="formData" :rules="rules" label-position="right" label-width="60px" status-icon>
+            <el-form ref="formRef" :model="formData" :rules="rules" label-position="right" label-width="86px" status-icon>
               <el-form-item prop="username" label="账户">
                 <el-input v-model="formData.username" />
               </el-form-item>
               <el-form-item prop="password" label="密码">
                 <el-input type="password" v-model="formData.password" />
               </el-form-item>
+              <!-- captcha -->
+              <el-form-item prop="captcha" label="验证码">
+                <el-input v-model="formData.captcha" style="width: 100px;margin-right: 20px;" />
+                <div href="javascript:;" class="svg" v-html="svgStr"></div><a href="javascript:;" @click="genCaptcha()"
+                  style="margin-left: 20px;">换一张</a>
+              </el-form-item>
+
               <el-form-item label-width="22px" prop="agree">
                 <el-checkbox size="large" v-model="formData.agree">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subbtn" @click="submitForm(formRef)">点击登录</el-button>
+              <div class="btn-group">
+                <el-link type="primary" @click="isLoginVisible = !isLoginVisible">注册</el-link>
+                <el-button size="large" type="primary" class="subbtn" @click="submitForm(formRef)">点击登录</el-button>
+              </div>
+            </el-form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-section section" key="reguser" v-else>
+      <div class="wrapper">
+        <nav>
+          <a href="javascript:;">用户注册</a>
+        </nav>
+        <div class="account-box">
+          <div class="form">
+            <el-form ref="formReg" :model="formData" :rules="rules" label-position="right" label-width="86px" status-icon>
+              <el-form-item prop="username" label="用户名">
+                <el-input v-model="formData.username" />
+              </el-form-item>
+              <el-form-item prop="password" label="密码">
+                <el-input type="password" v-model="formData.password" />
+              </el-form-item>
+              <el-form-item prop="repwd" label="确认密码">
+                <el-input type="password" v-model="formData.repwd" />
+              </el-form-item>
+              <!-- captcha -->
+              <el-form-item prop="captcha" label="验证码">
+                <el-input v-model="formData.captcha" style="width: 100px;margin-right: 20px;" />
+                <div href="javascript:;" class="svg" v-html="svgStr"></div>
+                <a href="javascript:;" @click="genCaptcha()" style="margin-left: 20px;">换一张</a>
+              </el-form-item>
+              <!-- <el-button size="large" class="regbtn" @click="regUser(formReg)">注册</el-button> -->
+              <div class="btn-group">
+                <el-link @click="isLoginVisible = !isLoginVisible">返回</el-link>
+                <el-button size="large" type="primary" class="subbtn" @click="regUser(formReg)">点击注册</el-button>
+              </div>
             </el-form>
           </div>
         </div>
@@ -114,20 +226,9 @@ const submitForm = (formE1) => {
       display: block;
       height: 132px;
       width: 100%;
-      background-color: red;
       text-indent: -9999px;
-      background: url('@/assets/images/logo.png') no-repeat center 18px/contain;
+      background: url('@/assets/images/return-sd-logo1.png') no-repeat center 18px/contain;
     }
-  }
-
-  .sub {
-    // 什么东西
-    flex: 1;
-    font-size: 24px;
-    font-weight: normal;
-    margin-bottom: 38px;
-    margin-left: 20px;
-    color: #666;
   }
 
   .entry {
@@ -143,8 +244,8 @@ const submitForm = (formE1) => {
   }
 }
 
-.login-section {
-  background: url('@/assets/images/login-bg.png') no-repeat center/cover;
+.section {
+  background: url('@/assets/images/login-bg2.png') no-repeat center/cover;
   height: 488px;
   position: relative;
 
@@ -176,6 +277,13 @@ const submitForm = (formE1) => {
         text-align: center;
         font-size: 18px;
       }
+    }
+
+    .svg {
+      display: inline-block;
+      width: 100px;
+      height: 40px;
+      background-color: #ffd700;
     }
   }
 }
@@ -212,11 +320,15 @@ const submitForm = (formE1) => {
   }
 }
 
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
 
-
-.subbtn {
-  background: $defColor;
+.regbtn {
   width: 100%;
-  color: #fff;
+  background-color: skyblue;
+
 }
 </style>

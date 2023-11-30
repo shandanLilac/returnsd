@@ -51,7 +51,7 @@
         width: 100%;
         height: 132px;
         text-indent: -9999px;
-        background: url('@/assets/images/return-sd-logo.png') no-repeat center 30px/contain;
+        background: url('@/assets/images/return-sd-logo1.png') no-repeat center 30px/contain;
       }
     }
 

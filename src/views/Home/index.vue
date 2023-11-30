@@ -1,12 +1,16 @@
 <script setup>
-import itemPad from './components/itemPad.vue'
+// import itemPad from './components/itemPad.vue'
+import itemPad from './components/itemPad2.vue'
 </script>
 
 <template>
   <div class="main-box">
     <div class="container">
-      <div class="items" v-for="item in 4" :key="item">
-        <itemPad></itemPad>
+      <h1>参与讨论</h1>
+      <div class="contain">
+        <div class="items" v-for="item in 4" :key="item">
+          <itemPad></itemPad>
+        </div>
       </div>
     </div>
   </div>
@@ -18,9 +22,10 @@ import itemPad from './components/itemPad.vue'
   background: #fff;
   padding: 40px 0;
 
-  .container {
+  .contain {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 }
 </style>
