@@ -79,21 +79,23 @@ const formReg = ref(null)
 const regUser = (formEl) => {
   formEl.validate(async (valid) => {
     if (valid) {
-      const { username, password, repwd, captcha, uuid } = formData.value
+      let { username, password, repwd, captcha, uuid } = formData.value
+      password = encryptFn(password)
+      repwd=encryptFn(repwd)
       await regUserAPI(username, password, repwd, captcha, uuid)
       isLoginVisible.value = true
       ElMessage({ type: 'success', message: '注册成功，请登录。' })
     }
   })
 }
-const svgStr = ref(''), svgText = ref('')
+
 // 图形验证
+const svgStr = ref(''), svgText = ref('')
 const genCaptcha = async () => {
   formData.value.uuid = uuidv4()
   const { data: res } = await genCaptchaAPI(formData.value.uuid)
   svgStr.value = res.data.svg
   svgText.value = res.data.text
-  localStorage.setItem('key', res.data.pubkey)
 }
 
 onMounted(() => {

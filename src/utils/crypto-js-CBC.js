@@ -5,6 +5,7 @@
 import CryptoJS from "crypto-js"
 
 export const encryptFn = (val) => {
+  if (typeof (val) == 'object') val = JSON.stringify(val)  //加密一个对象，这句是必要的。
   const key = CryptoJS.enc.Utf8.parse('bjsqyhhycbxqrhxq')
     , iv = CryptoJS.enc.Utf8.parse('zslwbmywjmswqyfw')
     , srcs = CryptoJS.enc.Utf8.parse(val)
