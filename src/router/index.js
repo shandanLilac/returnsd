@@ -14,7 +14,7 @@ const router = createRouter({
       path: '', component: Layout, children: [
         { path: '', component: Home },
         { path: 'chatroom/:id', component: ChatRoom },
-        { path: 'issue', component: Issue },
+        { path: 'issue/:id', component: Issue },
         { path: 'forhelp', component: ForHelp }
       ]
     },

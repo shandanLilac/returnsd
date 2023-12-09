@@ -1,16 +1,32 @@
 <script setup>
-// import itemPad from './components/itemPad.vue'
 import itemPad from './components/itemPad2.vue'
+import { ref, onMounted } from 'vue'
+import ConsultPad from './components/consulting.vue'
+import { usePubDataStore } from "@/stores/usePubDataStore.js"
+
+const frondEnd = ref([]), serverEnd = ref([]), moment = ref([]), topic1 = ref([]), topic2 = ref([]), topic3 = ref([])
+const pubDataStore = usePubDataStore()
+onMounted(async () => {
+  await pubDataStore.getChatroomTags()
+  frondEnd.value = pubDataStore.pubdata.data.data.filter(x => x.title === '前端')
+  serverEnd.value = pubDataStore.pubdata.data.data.filter(x => x.title === '服务器')
+  moment.value = pubDataStore.pubdata.data.data.filter(x => x.title === '本地圈')
+  topic1.value = pubDataStore.pubdata.data.topic[0]
+  topic2.value = pubDataStore.pubdata.data.topic[1]
+  topic3.value = pubDataStore.pubdata.data.topic[2]
+})
+
 </script>
 
 <template>
   <div class="main-box">
     <div class="container">
-      <h1>参与讨论</h1>
+      <h1>点击参与讨论</h1>
       <div class="contain">
-        <div class="items" v-for="item in 4" :key="item">
-          <itemPad></itemPad>
-        </div>
+        <itemPad :title="1" :tags="frondEnd" :topic="topic1" />
+        <itemPad :title="2" :tags="serverEnd" :topic="topic2" />
+        <itemPad :title="3" :tags="moment" :topic="topic3" />
+        <ConsultPad></ConsultPad>
       </div>
     </div>
   </div>
@@ -28,4 +44,4 @@ import itemPad from './components/itemPad2.vue'
     flex-wrap: wrap;
   }
 }
-</style>
+</style>@/stores/usePubDataStore

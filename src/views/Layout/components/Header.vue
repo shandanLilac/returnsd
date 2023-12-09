@@ -1,5 +1,10 @@
 <script setup>
+import { ref } from "vue"
+import { usePubDataStore } from "@/stores/usePubDataStore.js"
 
+const pubDataStore = usePubDataStore()
+const cataList = ref([])
+cataList.value = pubDataStore.pubdata.data.topCate
 </script>
 
 <template>
@@ -14,13 +19,8 @@
           <RouterLink to="/">首页</RouterLink>
         </li>
         <li>
-          <RouterLink to="/chatroom/1">前端</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/chatroom/2">服务器</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/chatroom/3">本地圈</RouterLink>
+          <RouterLink active-class="active" v-for="item in cataList" :key="item.id" :to="/chatroom/ + item.id">{{
+            item.title }}</RouterLink>
         </li>
         <li>
           <RouterLink to="/forhelp">技术支持</RouterLink>
@@ -62,8 +62,14 @@
 
       li {
         margin-right: 40px;
-        width: 68px;
+        width: 70px;
         text-align: center;
+
+        &:nth-child(2) {
+          display: flex;
+          justify-content: space-between;
+          width: 210px;
+        }
 
         a {
           display: inline-block;
@@ -98,6 +104,11 @@
         color: #666;
       }
     }
+  }
+
+  .active {
+    color: $defColor;
+    border-bottom: 1px solid $defColor;
   }
 }
 </style>

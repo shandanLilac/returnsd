@@ -3,9 +3,9 @@
     <div class="container">
       <div class="copyright">
         <p>
-          <a href="javascript:;">关于我们</a>
-          <a href="javascript:;">帮助中心</a>
-          <a href="javascript:;">技术供给</a>
+          <a href="javascript:;">经验交流</a>
+          <a href="javascript:;">信息共享</a>
+          <a href="javascript:;">技术支持</a>
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
         </p>

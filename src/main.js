@@ -4,6 +4,9 @@ import router from "./router"
 import '@/style/common.scss'
 import { createPinia } from "pinia"
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+// import '@/assets/iconfont/iconfont.js'
+// import '@/assets/iconfont/iconfont.css'
+
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

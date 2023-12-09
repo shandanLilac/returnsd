@@ -81,7 +81,7 @@ const regUser = (formEl) => {
     if (valid) {
       let { username, password, repwd, captcha, uuid } = formData.value
       password = encryptFn(password)
-      repwd=encryptFn(repwd)
+      repwd = encryptFn(repwd)
       await regUserAPI(username, password, repwd, captcha, uuid)
       isLoginVisible.value = true
       ElMessage({ type: 'success', message: '注册成功，请登录。' })

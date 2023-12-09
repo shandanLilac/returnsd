@@ -26,3 +26,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+crypto-js-CBC.js
+crypto-js-ECB.js
+
