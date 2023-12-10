@@ -29,4 +29,4 @@ coverage
 
 crypto-js-CBC.js
 crypto-js-ECB.js
-
+/utils

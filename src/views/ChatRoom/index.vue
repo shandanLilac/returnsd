@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 import { getTopicListAPI } from '@/apis/publicdata'
+import dayjs from "dayjs"
 
 const route = useRoute()
 const resData = ref({})
@@ -47,7 +48,7 @@ const updatePagnum = (val) => {
             <li class="row" v-for="item in resData.topList" :key="item.id">
               <RouterLink class="list-item" :to="'/issue/' + item.sub_id">
                 <span>{{ item.title }}</span>
-                <span>{{ item.pub_date }}</span>
+                <span>{{ dayjs(item.pub_date).format('YYYY-MM-DD') }}</span>
                 <el-badge :value="item.count" type="danger">
                   <el-tag type="warning" effect="dark" round>热度</el-tag>
                 </el-badge>

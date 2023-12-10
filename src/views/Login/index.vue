@@ -82,9 +82,13 @@ const regUser = (formEl) => {
       let { username, password, repwd, captcha, uuid } = formData.value
       password = encryptFn(password)
       repwd = encryptFn(repwd)
-      await regUserAPI(username, password, repwd, captcha, uuid)
-      isLoginVisible.value = true
-      ElMessage({ type: 'success', message: '注册成功，请登录。' })
+      const { data: res } = await regUserAPI(username, password, repwd, captcha, uuid)
+      console.log(res.code)
+      if (res.code == 200) {
+        isLoginVisible.value = true
+        ElMessage({ type: 'success', message: '注册成功，请登录。' })
+      } else if (res.code == 1) ElMessage({ type: 'warning', message: res.msg })
+
     }
   })
 }

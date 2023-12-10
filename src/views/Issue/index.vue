@@ -5,6 +5,8 @@ import { ref, onMounted } from "vue"
 import { issueTheViewAPI } from "@/apis/authoriedPerform.js"
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+// import { replaceStr } from "@/utils/replactStr"
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const cateInfo = ref({}), itemList = ref([]), total = ref(0), words = ref(''), pagnum = ref(1)
@@ -23,8 +25,10 @@ onMounted(() => {
 // 发表评论
 const issueTheView = async () => {
   if (!words.value) return ElMessage({ type: 'warning', message: '内容空空如也~' })
+  // words.value = replaceStr(words.value)
   const res = await issueTheViewAPI(cateInfo.value.cate_id, cateInfo.value.sub_id, words.value)
   if (res.data.code != 0) return ElMessage({ type: 'warning', message: '发布失败' })
+  words.value = ''
   getDetailsInfo()
 }
 
@@ -54,8 +58,8 @@ const updatePagnum = (val) => {
             <el-descriptions-item label="分类">{{ cateInfo.cate_title }}</el-descriptions-item>
             <el-descriptions-item label="标题">{{ cateInfo.top_title }}</el-descriptions-item>
             <el-descriptions-item label="相关信息">
-              <el-tag size="small" class="tag-item">发表日期:{{ cateInfo.pub_date }}</el-tag>
-              <el-tag size="small" class="tag-item">参与人次:{{ cateInfo.count }}次</el-tag>
+              <el-tag size="small" class="tag-item">发表日期:{{ dayjs(cateInfo.pub_date).format('YYYY-MM-DD') }}</el-tag>
+              <el-tag size="small" type="danger" class="tag-item">参与人次:{{ cateInfo.count }}次</el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="话题作者">admin_sd</el-descriptions-item>
           </el-descriptions>
@@ -66,7 +70,7 @@ const updatePagnum = (val) => {
             <li v-for="item in itemList" :key="item.top_id">
               <div class="sub-info">
                 <span class="author">{{ item.username }}</span>
-                <span class="pub_time">{{ item.issue_date }}</span>
+                <span class="pub_time">{{ dayjs(item.issue_date).format('YYYY-MM-DD') }}</span>
               </div>
               <div class="item-info">
                 {{ item.content }}
@@ -85,7 +89,7 @@ const updatePagnum = (val) => {
         <!-- <h3>参与讨论</h3> -->
         <div class="issue-form">
           <el-input class="inp" v-model="words" maxlength="126" placeholder="请在此输入评论内容" show-word-limit type="text"
-            @keuup.enter="issueTheView" />
+            @keyup.enter="issueTheView" />
           <el-button class="btn" type="primary" @click="issueTheView">发布</el-button>
         </div>
       </div>
