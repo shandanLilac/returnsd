@@ -119,9 +119,11 @@ const updatePagnum = (val) => {
 
         li {
           padding: 8px 5px;
-          background-color: #e1f5fe;
-          border-bottom: 1px dotted $defColor;
+          background-color: #e0f7fa;
+          border: 1px solid #80d8ff;
+          border-radius: 3px;
           margin-bottom: 2px;
+          transition: all 0.5s;
 
           .sub-info {
             height: 24px;
@@ -135,7 +137,7 @@ const updatePagnum = (val) => {
 
             .pub_time {
               font-size: 12px;
-              color: #999;
+              color: #666;
             }
           }
 

@@ -89,13 +89,17 @@
 
       .intro-info {
         ul {
-          margin-bottom: 5px;
+          margin-bottom: 20px;
           width: 100%;
-          border: 1px dotted $defColor;
+          border: 1px dotted #64ffda;
+          border-radius: 5px;
 
           li {
+            background: rgba($color: #999, $alpha: 0.2);
+            box-shadow: 2px 2px 4px rgba($color: #000, $alpha: 0.2);
+
             h3 {
-              background-color: $defColor;
+              background: linear-gradient(to right, #1de9b6 0%, #a7ffeb 50%, #64ffda 100%);
               color: #f5f5f5;
               height: 42px;
               line-height: 42px;

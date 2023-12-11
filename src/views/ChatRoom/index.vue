@@ -91,7 +91,7 @@ const updatePagnum = (val) => {
 
         .list-head {
           background-color: $defColor;
-          box-shadow: 0 2px 1px rgba($color: #000000, $alpha: 0.2);
+          box-shadow: 0 2px 1px rgba($color: #000, $alpha: 0.2);
           margin-bottom: 10px;
 
           span {
@@ -113,11 +113,13 @@ const updatePagnum = (val) => {
             justify-content: space-between;
             align-items: center;
             color: #666;
-            border-bottom: 1px dotted #e7e7e7;
             padding: 0 16px;
+            border: 1px solid $defColor;
+            border-radius: 5px;
+            margin-bottom: 5px;
 
             &:hover {
-              background-color: #e1f5fe;
+              background: linear-gradient(to right, #1de9b6 0%, #a7ffeb 50%, #64ffda 100%);
             }
 
             span {
