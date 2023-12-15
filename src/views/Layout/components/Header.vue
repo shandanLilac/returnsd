@@ -23,7 +23,7 @@ cataList.value = pubDataStore.pubdata.data.topCate
             item.title }}</RouterLink>
         </li>
         <li>
-          <RouterLink to="/forhelp">技术支持</RouterLink>
+          <RouterLink to="/forhelp">技术咨询</RouterLink>
         </li>
       </ul>
 

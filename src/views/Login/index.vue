@@ -12,8 +12,8 @@ const userStore = useUserStore()
 const router = useRouter()
 // 表单数据
 const formData = ref({
-  username: 'zex126',
-  password: 'Ab123456',
+  username: '',
+  password: '',
   repwd: '',
   captcha: '',
   uuid: '',
@@ -40,14 +40,14 @@ const rules = {
   repwd: [
     { validator: verifyRepwd, trigger: 'blur' }
   ],
-  agree: [
-    {
-      validator: (rules, val, callback) => {
-        if (val === false) return callback(new Error('请先同意协议'))
-        callback()
-      }
-    }
-  ],
+  // agree: [
+  //   {
+  //     validator: (rules, val, callback) => {
+  //       if (val === false) return callback(new Error('请先同意协议'))
+  //       callback()
+  //     }
+  //   }
+  // ],
   captcha: [
     { required: true, message: '必填项不能为空', trigger: 'blur' },
     {
@@ -83,7 +83,6 @@ const regUser = (formEl) => {
       password = encryptFn(password)
       repwd = encryptFn(repwd)
       const { data: res } = await regUserAPI(username, password, repwd, captcha, uuid)
-      console.log(res.code)
       if (res.code == 200) {
         isLoginVisible.value = true
         ElMessage({ type: 'success', message: '注册成功，请登录。' })
@@ -150,9 +149,13 @@ onUpdated(() => { genCaptcha() })
                   style="margin-left: 20px;">换一张</a>
               </el-form-item>
 
-              <el-form-item label-width="22px" prop="agree">
-                <el-checkbox size="large" v-model="formData.agree">
+              <!-- <el-form-item label-width="22px" prop="agree"> -->
+              <el-form-item label-width="22px">
+                <!-- <el-checkbox size="large" v-model="formData.agree">
                   我已同意隐私条款和服务条款
+                </el-checkbox> -->
+                <el-checkbox size="large" v-model="formData.agree" autocomplete="formData.agree">
+                  记住密码
                 </el-checkbox>
               </el-form-item>
               <div class="btn-group">

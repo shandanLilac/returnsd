@@ -5,7 +5,7 @@
 <template>
   <div class="consulting-pad">
     <div class="pad-head">
-      <h2>技术支持</h2>
+      <h2>技术咨询</h2>
       <RouterLink to="/forhelp">点击咨询</RouterLink>
     </div>
     <div class="item-list">
@@ -14,10 +14,10 @@
 
         <div class="support-list">
           <el-tag class="support-tag" type="" effect="dark" size="large">前端</el-tag>
-          <p>网页设计</p>
-          <p>网站开发</p>
+          <p>网页设计咨询</p>
+          <p>网站开发咨询</p>
         </div>
-        <span>企业首页、个人博客、管理系统、数据加密...</span>
+        <span>网站首页、管理系统、数据加密...</span>
       </div>
       <div class="item server-end">
         <p class="icon-item"><i class="iconfont icon-database"></i></p>
@@ -25,9 +25,9 @@
         <div class="support-list">
           <!-- <h3>服务器</h3> -->
           <el-tag class="support-tag" type="danger" effect="dark" size="large">服务器</el-tag>
-          <p>服务器开发</p>
-          <p>数据库设计</p>
-          <p>接口调试</p>
+          <p>服务器开发咨询</p>
+          <p>数据库设计咨询</p>
+          <p>接口调试咨询</p>
         </div>
         <span>跨域、身份认证、接口文档、部署上线...</span>
       </div>
@@ -37,11 +37,11 @@
         <div class="support-list">
           <!-- <h3>项目维护</h3> -->
           <el-tag class="support-tag" type="success" effect="dark" size="large">项目维护</el-tag>
-          <p>HTML+CSS+JS原生项目</p>
-          <p>Jquery项目</p>
-          <p>vue项目</p>
-          <p>express服务器</p>
-          <p>koa服务器</p>
+          <p>HTML+CSS+JS原生项目咨询</p>
+          <p>Jquery项目咨询</p>
+          <p>vue项目咨询</p>
+          <p>express服务器咨询</p>
+          <p>koa服务器咨询</p>
         </div>
         <span>功能新增、需求改造、技术升级、Debug...</span>
       </div>

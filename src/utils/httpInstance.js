@@ -7,7 +7,7 @@ import 'element-plus/theme-chalk/el-loading.css'
 import { optionsObj } from "@/assets/ElLoading/loading-option"
 
 const httpInstance = axios.create({
-  baseURL: 'http://127.0.0.1:3007',
+  baseURL: 'http://39.104.209.182:3007',
   timeout: 20000,
 })
 
